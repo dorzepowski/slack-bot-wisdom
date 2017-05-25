@@ -14,7 +14,7 @@ class WiseManFactory {
 
 	@Bean
 	WiseManImage wisdomImage(@Value(value = "classpath:DC.png") Resource image){
-		def imageFile = new ImageFile(image.inputStream)
+		def imageFile = new ImageFile(image)
 		return new DamianoCohelloImage(imageFile)
 	}
 
