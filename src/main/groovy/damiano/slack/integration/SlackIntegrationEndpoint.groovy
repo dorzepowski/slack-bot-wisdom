@@ -1,6 +1,5 @@
 package damiano.slack.integration
 
-import damiano.slack.wisdom.WordsOfWisdomFacade
 import groovy.transform.TypeChecked
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,19 +15,27 @@ class SlackIntegrationEndpoint {
 
 	final TokenValidator tokenValidator
 
-	final WordsOfWisdomFacade wordsOfWisdomFacade;
 
-	SlackIntegrationEndpoint(TokenValidator tokenValidator, WordsOfWisdomFacade wordsOfWisdomFacade) {
+	SlackIntegrationEndpoint(TokenValidator tokenValidator) {
 		this.tokenValidator = tokenValidator
-		this.wordsOfWisdomFacade = wordsOfWisdomFacade
 	}
 
 	@RequestMapping(path = "/", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = POST)
 	@ResponseBody
-	SlackResponse demo(@RequestParam("token") String token, @RequestParam("text") String wisdom) {
+	SlackResponse demo(@RequestParam("token") String token, @RequestParam("text") String text) {
 		tokenValidator.validate(token)
-		String imageName = wordsOfWisdomFacade.imageNameFor(wisdom)
-		return new SlackResponse(imageName)
+
+
+
+
+		return new SlackResponse(text)
+	}
+
+	@RequestMapping(path = "/test", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = POST)
+	@ResponseBody
+	String test(@RequestParam("token") String token, @RequestParam("text") String text) {
+
+		return "{ 'token':'$token', 'text':'$text' }"
 	}
 
 }

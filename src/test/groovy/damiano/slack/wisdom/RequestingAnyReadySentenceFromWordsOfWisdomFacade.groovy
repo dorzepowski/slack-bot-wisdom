@@ -1,6 +1,5 @@
 package damiano.slack.wisdom
 
-import damiano.slack.integration.SlackResponse
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -20,18 +19,6 @@ class RequestingAnyReadySentenceFromWordsOfWisdomFacade extends Specification {
 	void setup() {
 		factory = new WordsOfWisdomFacadeTestFixture()
 		facade = factory.create()
-	}
-
-	//def wisdom = ''
-
-	def conception(String text) {
-		def command = createCommand(text)
-		//- SearchForRandomWisdom
-		//- SearchByKeyWords
-		//- ApplyNewWisdom
-
-		WordOfWisdom word = command.callForWisdom()
-		return new SlackResponse(word)
 	}
 
 

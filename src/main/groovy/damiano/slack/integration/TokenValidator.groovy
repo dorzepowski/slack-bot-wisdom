@@ -10,8 +10,9 @@ class TokenValidator {
 
 	final String token
 
-	TokenValidator(@Value('${slack.token}') String token) {
+	TokenValidator(@Value('${SLACK_TOKEN}') String token) {
 		this.token = token
+		println "token = $token"
 	}
 
 	void validate(String tokenToValidate) {

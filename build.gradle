@@ -32,15 +32,17 @@ dependencies {
 		exclude module: "spring-boot-starter-tomcat"
 	}
 	compile("org.springframework.boot:spring-boot-starter-undertow")
-	compile('org.codehaus.groovy:groovy')
+	compile('org.codehaus.groovy:groovy-all')
 
 
-	compile group: 'org.spockframework', name: 'spock-core', version: '1.1-groovy-2.4'
-//	testCompile("org.springframework.boot:spring-boot-starter-test")
-//	testCompile("org.spockframework:spock-core:1.1-groovy-2.4-rc-3") {
-//		exclude group: "org.codehaus.groovy", module: "groovy-all"
-//	}
-//	testRuntime("org.spockframework:spock-spring:1.1-groovy-2.4-rc-3")
+
+	testCompile("org.springframework.boot:spring-boot-starter-test")
+	testCompile("org.spockframework:spock-core:1.1-groovy-2.4-rc-3") {
+		exclude group: "org.codehaus.groovy", module: "groovy-all"
+	}
+	testRuntime("org.spockframework:spock-spring:1.1-groovy-2.4-rc-3")
+	testCompile group: 'org.codehaus.groovy.modules.http-builder', name: 'http-builder', version: '0.6'
+
 	testCompile("info.solidsoft.spock:spock-global-unroll:0.5.1")
 	testRuntime("cglib:cglib-nodep:3.2.5")
 }
