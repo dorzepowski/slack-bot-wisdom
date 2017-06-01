@@ -1,33 +1,35 @@
 package damiano.slack.integration
 
+import javax.servlet.http.HttpServletRequest
+
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
-import damiano.wisdom.WordOfWisdom
 import groovy.transform.PackageScope
 
 @PackageScope
 class SlackResponse {
 
 	@JsonProperty("response_type")
-	private ResponseType responseType = ResponseType.IN_CHANEL
+	private final ResponseType responseType = ResponseType.IN_CHANEL
 
 	@JsonProperty
-	private String text
+	private final List<Attachment> attachments = []
 
-	@JsonProperty
-	private List<Attachment> attachments = []
+	@JsonIgnore
+	private final HttpServletRequest request
 
-	SlackResponse(String text) {
-		this.text = text
+	SlackResponse(HttpServletRequest request, String imageId) {
+		this.request = request
+		attachments.add(new Attachment(imageId))
 	}
-
-	SlackResponse(WordOfWisdom wordOfWisdom) {
-		this.text = "Don't know yet what to do with words of wisdom"
-	}
-
 
 	private class Attachment {
 
 		@JsonProperty("image_url")
-		String imageUrl
+		private final String imageUrl
+
+		Attachment(String imageId) {
+			this.imageUrl = request.requestURL.append("wisdom/$imageId").toString()
+		}
 	}
 }

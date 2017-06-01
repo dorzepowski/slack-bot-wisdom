@@ -5,11 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
@@ -24,47 +27,11 @@ class SlackIntegrationEndpointSpec extends Specification {
 	@Autowired
 	private TestRestTemplate restTemplate
 
-	@Ignore
-	def "when someone use slash command and provide text, then return location of image"() {
-		given:
-			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>()
-			map.add("token", "12345")
-			map.add("text", "")
-
-		when:
-			ResponseEntity<String> response = restTemplate.postForEntity("/", map, String.class)
-			def json = new JsonSlurper().parseText(response.body)
-			println json
-			println response.headers
-			println port
-		then:
-			json.text == ""
-			json.response_type == "in_channel"
-			json.attachments
-			json.attachments.image_url == "http://localhost:$port/wisdom/{hdkghjsghjhs}"
-	}
-
-	def "Show me content :) "() {
-		given:
-			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>()
-			map.add("token", "12345")
-			map.add("text", "")
-
-		when:
-			ResponseEntity<String> response = restTemplate.postForEntity("/", map, String.class)
-			def json = new JsonSlurper().parseText(response.body)
-			println json
-			println response.headers
-			println port
-		then:
-			json
-	}
-
 	def "Respond for command go to chanel"() {
 		given:
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>()
 			map.add("token", "12345")
-			map.add("text", "")
+			map.add("text", "very wisdom text")
 
 		when:
 			ResponseEntity<String> response = restTemplate.postForEntity("/", map, String.class)
@@ -77,28 +44,53 @@ class SlackIntegrationEndpointSpec extends Specification {
 		given:
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>()
 			map.add("token", "12345")
-			map.add("text", "")
+			map.add("text", "very wisdom text")
 
 		when:
 			ResponseEntity<String> response = restTemplate.postForEntity("/", map, String.class)
 			def message = new JsonSlurper().parseText(response.body)
 		then:
 			message.attachments != null
+			message.attachments.size() == 1
+
 	}
 
 	def "Respond with image url"() {
 		given:
 			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>()
 			map.add("token", "12345")
-			map.add("text", "")
+			map.add("text", "very wisdom text")
 
 		when:
 			ResponseEntity<String> response = restTemplate.postForEntity("/", map, String.class)
 			def message = new JsonSlurper().parseText(response.body)
-			def attachments = message.attachments
+			def attachment = message.attachments.first()
 		then:
-			attachments.image_url
-			attachments.image_url ==~ /http:\/\/localhost:$port\/wisdom\/\w+/
+			attachment.image_url
+			attachment.image_url.startsWith("http://localhost:$port/wisdom/")
+	}
+
+
+	def "Provide image for received id"() {
+		given:
+			MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>()
+			map.add("token", "12345")
+			map.add("text", "very wisdom text")
+			ResponseEntity<String> response = restTemplate.postForEntity("/", map, String.class)
+			def message = new JsonSlurper().parseText(response.body)
+			String imageUrl = message.attachments.first().image_url
+		when:
+			HttpHeaders headers = new HttpHeaders()
+			headers.setAccept([MediaType.IMAGE_PNG])
+			HttpEntity<String> request = new HttpEntity<String>(headers)
+
+			ResponseEntity<byte[]> entity = restTemplate.exchange(imageUrl, HttpMethod.GET, request, byte[])
+			byte[] image = entity.getBody()
+
+		then:
+			image
+			image.size() != 0
+
 	}
 
 
