@@ -1,4 +1,4 @@
-package damiano.slack.integration
+package damiano.integration
 
 import groovy.transform.PackageScope
 import org.springframework.beans.factory.annotation.Value

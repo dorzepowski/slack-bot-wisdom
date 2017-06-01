@@ -1,4 +1,4 @@
-package damiano.slack.integration
+package damiano.integration
 
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired

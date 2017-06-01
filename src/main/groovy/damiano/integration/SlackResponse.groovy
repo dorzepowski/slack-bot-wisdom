@@ -1,4 +1,4 @@
-package damiano.slack.integration
+package damiano.integration
 
 import javax.servlet.http.HttpServletRequest
 
