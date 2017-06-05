@@ -3,6 +3,7 @@ package damiano.integration
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+import damiano.printer.Image
 import damiano.wisdom.WordsOfWisdomFacade
 import groovy.transform.TypeChecked
 import org.springframework.core.io.ByteArrayResource
@@ -46,6 +47,7 @@ class SlackIntegrationEndpoint {
 	@ResponseBody
 	Resource wisdomImage(
 			@PathVariable("imageId") String imageId, HttpServletRequest request, HttpServletResponse response) {
-		return new ByteArrayResource(wordsOfWisdomFacade.wisdomImageBytesForId(imageId))
+		Image image = wordsOfWisdomFacade.wisdomImageBytesForId(imageId)
+		return new ByteArrayResource(image.toByteArray())
 	}
 }

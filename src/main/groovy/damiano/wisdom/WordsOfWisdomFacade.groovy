@@ -1,67 +1,65 @@
 package damiano.wisdom
 
 import java.awt.*
-import java.security.MessageDigest
 import java.util.concurrent.ConcurrentHashMap
-import javax.imageio.ImageIO
 
+import damiano.printer.Image
+import damiano.printer.Media
+import damiano.printer.Printer
 import groovy.util.logging.Slf4j
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.io.Resource
 import org.springframework.stereotype.Service
 
 @Slf4j
 @Service
 class WordsOfWisdomFacade {
 
-	@Value(value = "classpath:DC.png")
-	private Resource image
+	private final Media media
+
+	private final WordsOfWisdom wordsOfWisdom
 
 	private final Map<String, String> DB = new ConcurrentHashMap()
 
-	WordsOfWisdomFacade(@Value(value = "classpath:DC.png") Resource image) {
-		this.image = image
+	WordsOfWisdomFacade(
+			WordsOfWisdom wordsOfWisdom,
+			Media media
+	) {
+		this.wordsOfWisdom = wordsOfWisdom
+		this.media = media
 	}
 
 	String wisdomIdFor(String text) {
-		String id = MessageDigest.getInstance('SHA-256').digest(text.bytes).encodeHex().toString()
 		log.info("Wisdom to process: $text")
-		DB.put(id, text)
-		return id
+		WordOfWisdom wisdom = new WordOfWisdom(text)
+		wordsOfWisdom.add(wisdom)
+
+		DB.put(wisdom.id, text)
+
+		return wisdom.id
 	}
 
-	byte[] wisdomImageBytesForId(String id) {
-		String wisdom = DB.get(id) ?: throwTheyFucked()
+	Image wisdomImageBytesForId(String id) {
+		WordOfWisdom wordOfWisdom = wordsOfWisdom.get(id)
 
 		log.info "Read original image"
-		def png = ImageIO.read(image.inputStream)
-		def g = png.createGraphics()
+		Printer printer = media.newPrinter()
 
-		def y = 100
+		wordOfWisdom.wisdom.eachLine { text ->
+			log.info "print wisdom line"
 
-		wisdom.eachLine {
-			log.info "Write wisdom line"
-			g.color = Color.GRAY
-			g.renderingHints = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
-			g.font = new Font(Font.SERIF, Font.PLAIN, 30)
-			g.drawString(it, 50, y)
-
-			y += g.fontMetrics.height
-
+			printer.println {
+				text.ofSize(30).withColor(Color.GRAY)
+			}
 		}
 
-		log.info "Write author"
-		g.font = new Font(Font.SERIF, Font.ITALIC, 30)
-		g.drawString("~ Damiano Cohello", 50, y)
-		g.dispose()
+		printer.println {
+			log.info "print author"
 
-		log.info "Write image"
-		ByteArrayOutputStream os = new ByteArrayOutputStream()
-		ImageIO.write(png, "png", os)
-		return os.toByteArray()
+			"~ Damiano Cohello".ofSize(30).withColor(Color.GRAY).italic()
+		}
+
+
+		Image image = printer.toImage()
+		return image
 	}
 
-	private static def throwTheyFucked() {
-		throw new NotFound()
-	}
 }
