@@ -4,6 +4,9 @@ import java.awt.*
 
 import groovy.transform.PackageScope
 
+import static damiano.printer.Decoration.ITALIC
+import static damiano.printer.Decoration.NONE
+
 @PackageScope
 class TextLine implements Printable {
 
@@ -13,7 +16,7 @@ class TextLine implements Printable {
 
 	private Color color = Color.BLACK
 
-	private int style = Font.PLAIN
+	private Decoration decoration = NONE
 
 
 	TextLine(String text, int size) {
@@ -29,14 +32,12 @@ class TextLine implements Printable {
 
 	@Override
 	Printable italic() {
-		this.style = Font.ITALIC
+		this.decoration = ITALIC
 		return this
 	}
 
 	@Override
-	void printOn(Graphics2D g) {
-		g.color = color
-		g.font = new Font(Font.SERIF, style, size)
-		g.drawString(text, 0, 0)
+	void printOn(Media media) {
+		media.text(text).withColor(color).withSize(size).withDecoration(decoration).print()
 	}
 }

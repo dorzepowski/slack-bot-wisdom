@@ -1,9 +1,8 @@
 package damiano.wisdom
 
+import damiano.printer.BackgroundImage
 import damiano.printer.Image
-import damiano.printer.Media
 import org.springframework.core.io.ClassPathResource
-import spock.lang.Ignore
 import spock.lang.Specification
 
 class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
@@ -11,7 +10,7 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 	def "provide id for wisdom text"() {
 		given:
 			String text = "some wise text"
-			WordsOfWisdomFacade wordsOfWisdomFacade = new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new Media(new ClassPathResource("DC.png")))
+			WordsOfWisdomFacade wordsOfWisdomFacade = new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new BackgroundImage(new ClassPathResource("DC.png")))
 		when:
 			String id = wordsOfWisdomFacade.wisdomIdFor(text)
 		then:
@@ -21,7 +20,7 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 	def "get image for received id"() {
 		given:
 			String text = "some wise text"
-			WordsOfWisdomFacade wordsOfWisdomFacade = new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new Media(new ClassPathResource("DC.png")))
+			WordsOfWisdomFacade wordsOfWisdomFacade = new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new BackgroundImage(new ClassPathResource("DC.png")))
 		when:
 			String id = wordsOfWisdomFacade.wisdomIdFor(text)
 			byte[] image = wordsOfWisdomFacade.wisdomImageBytesForId(id).toByteArray()
@@ -30,7 +29,7 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 			image.length
 	}
 
-	@Ignore("for manual testing of generated image")
+	//@Ignore("for manual testing of generated image")
 	def "save image for manual test"() {
 		given:
 			String text = """
@@ -38,7 +37,7 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 							in
 							multiline
 						""".stripIndent()
-			WordsOfWisdomFacade wordsOfWisdomFacade = new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new Media(new ClassPathResource("DC.png")))
+			WordsOfWisdomFacade wordsOfWisdomFacade = new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new BackgroundImage(new ClassPathResource("DC.png")))
 
 		when:
 			String id = wordsOfWisdomFacade.wisdomIdFor(text)

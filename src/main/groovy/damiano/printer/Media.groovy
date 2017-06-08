@@ -1,21 +1,27 @@
 package damiano.printer
 
-import javax.imageio.ImageIO
+import java.awt.*
 
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.core.io.Resource
-import org.springframework.stereotype.Service
+interface Media {
 
-@Service
-class Media {
+	Text text(String text)
 
-	private final Resource resource
+	void moveRight(int offset)
 
-	Media(@Value(value = "classpath:DC.png") Resource resource) {
-		this.resource = resource
-	}
+	void scroll(int by)
 
-	Printer newPrinter() {
-		return new Printer(ImageIO.read(resource.inputStream))
+	void scrollToNextLine()
+
+	void dispose()
+
+	interface Text {
+
+		Text withColor(Color color)
+
+		Text withSize(int size)
+
+		Text withDecoration(Decoration decoration)
+
+		void print()
 	}
 }

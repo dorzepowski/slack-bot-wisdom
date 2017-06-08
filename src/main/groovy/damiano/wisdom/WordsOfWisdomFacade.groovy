@@ -1,10 +1,9 @@
 package damiano.wisdom
 
-import java.awt.*
 import java.util.concurrent.ConcurrentHashMap
 
+import damiano.printer.BackgroundImage
 import damiano.printer.Image
-import damiano.printer.Media
 import damiano.printer.Printer
 import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class WordsOfWisdomFacade {
 
-	private final Media media
+	private final BackgroundImage media
 
 	private final WordsOfWisdom wordsOfWisdom
 
@@ -21,7 +20,7 @@ class WordsOfWisdomFacade {
 
 	WordsOfWisdomFacade(
 			WordsOfWisdom wordsOfWisdom,
-			Media media
+			BackgroundImage media
 	) {
 		this.wordsOfWisdom = wordsOfWisdom
 		this.media = media
@@ -38,25 +37,12 @@ class WordsOfWisdomFacade {
 	}
 
 	Image wisdomImageBytesForId(String id) {
-		WordOfWisdom wordOfWisdom = wordsOfWisdom.get(id)
+		WordOfWisdom wisdom = wordsOfWisdom.get(id)
 
 		log.info "Read original image"
 		Printer printer = media.newPrinter()
 
-		wordOfWisdom.wisdom.eachLine { text ->
-			log.info "print wisdom line"
-
-			printer.println {
-				text.ofSize(30).withColor(Color.GRAY)
-			}
-		}
-
-		printer.println {
-			log.info "print author"
-
-			"~ Damiano Cohello".ofSize(30).withColor(Color.GRAY).italic()
-		}
-
+		wisdom.printWith(printer)
 
 		Image image = printer.toImage()
 		return image
