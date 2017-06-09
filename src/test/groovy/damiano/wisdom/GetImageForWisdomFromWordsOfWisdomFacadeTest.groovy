@@ -1,10 +1,9 @@
 package damiano.wisdom
 
-import javax.imageio.ImageIO
-
 import damiano.printer.BackgroundImage
-import damiano.printer.BufferedImagePrinter
-import org.springframework.core.io.ClassPathResource
+import damiano.printer.Image
+import damiano.printer.Printable
+import damiano.printer.Printer
 import spock.lang.Specification
 
 class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
@@ -32,9 +31,37 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 	}
 
 	private WordsOfWisdomFacade WordsOfWisdomFacade() {
-		new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), (BackgroundImage) {
-			new BufferedImagePrinter(ImageIO.read(new ClassPathResource("dc-background.png").inputStream))
-		})
+		new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new StubBackgroundImage())
 	}
 
+	class StubBackgroundImage implements BackgroundImage {
+
+		@Override
+		Printer newPrinter() {
+			return new StubPrinter()
+		}
+	}
+
+	class StubPrinter implements Printer {
+
+		int linesNumber
+
+		@Override
+		void println(Closure<Printable> printableSupplier) {
+			linesNumber++
+		}
+
+		@Override
+		Image toImage() {
+			return new StubImage()
+		}
+
+		class StubImage implements Image {
+
+			@Override
+			byte[] toByteArray() {
+				return new byte[linesNumber]
+			}
+		}
+	}
 }

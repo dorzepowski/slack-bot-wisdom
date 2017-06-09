@@ -7,6 +7,7 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
 import org.springframework.test.context.ContextConfiguration
+import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -30,7 +31,7 @@ class GetImageForManualTestingFromWordsOfWisdomFacadeSpec extends Specification 
 		given(image.toByteArray()).willReturn(imgResource.inputStream.bytes)
 	}
 
-	//@Ignore("for manual testing of generated image")
+	@Ignore("for manual testing of generated image")
 	def "save image for manual test"() {
 		given:
 			String text = """
