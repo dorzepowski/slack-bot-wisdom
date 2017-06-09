@@ -1,4 +1,4 @@
-package damiano.integration
+package damiano.integration.slack
 
 import com.fasterxml.jackson.annotation.JsonValue
 

@@ -1,7 +1,8 @@
-package damiano.integration
+package damiano.integration.slack
 
 import javax.servlet.http.HttpServletRequest
 
+import damiano.integration.slack.token.TokenValidator
 import damiano.printer.Image
 import damiano.wisdom.WordsOfWisdomFacade
 import groovy.transform.TypeChecked

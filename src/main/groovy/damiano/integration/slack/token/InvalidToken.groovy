@@ -1,4 +1,4 @@
-package damiano.integration
+package damiano.integration.slack.token
 
 import groovy.transform.PackageScope
 import org.springframework.http.HttpStatus
