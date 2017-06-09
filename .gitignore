@@ -1,3 +1,5 @@
+run.properties
+
 .gradle
 /build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -15,10 +17,10 @@
 *.iws
 *.iml
 *.ipr
+/classes
 
 ### NetBeans ###
 nbproject/private/
-build/
 nbbuild/
 dist/
 nbdist/

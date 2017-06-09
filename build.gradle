@@ -47,6 +47,14 @@ dependencies {
 	testRuntime("cglib:cglib-nodep:3.2.5")
 }
 
+bootRun {
+	if(project.hasProperty('dev')){
+		println "loadin dev run properties"
+		args = new File("run.properties").readLines().collect {"--$it"}
+		println args
+	}
+}
+
 
 task wrapper(type: Wrapper) {
 	gradleVersion = "3.4.1"
