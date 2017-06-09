@@ -4,9 +4,24 @@ import damiano.printer.BackgroundImage
 import damiano.printer.Image
 import damiano.printer.Printable
 import damiano.printer.Printer
+import spock.lang.Shared
 import spock.lang.Specification
+import spock.lang.Unroll
 
 class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
+
+	@Shared
+	static String singleLineWisdom = "some wise text"
+
+	@Shared
+	static String multiLineWisdom = """some wise text 
+									and another line""".stripIndent()
+
+	@Shared
+	static String multiLineWisdomWithUnneededNewLines = """
+														some wise text 
+														and another line
+														""".stripIndent()
 
 	def "provide id for wisdom text"() {
 		given:
@@ -18,7 +33,7 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 			id
 	}
 
-	def "get image for received id"() {
+	def "get image for given text"() {
 		given:
 			String text = "some wise text"
 			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
@@ -29,6 +44,40 @@ class GetImageForWisdomFromWordsOfWisdomFacadeTest extends Specification {
 			image
 			image.length
 	}
+
+	@Unroll
+	def "get image with #wisdomLinesNumber text line and author line for given #textType text"(String textType, String text, int wisdomLinesNumber) {
+		given:
+			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
+		when:
+			String id = wordsOfWisdomFacade.wisdomIdFor(text)
+			byte[] image = wordsOfWisdomFacade.wisdomImageBytesForId(id).toByteArray()
+		then:
+			image
+			image.length == wisdomLinesNumber + 1
+		where:
+			textType                         | text                                | wisdomLinesNumber
+			"single line"                    | singleLineWisdom                    | 1
+			"multi line"                     | multiLineWisdom                     | 2
+			"multiline with blank new lines" | multiLineWisdomWithUnneededNewLines | 2
+	}
+
+
+	@Unroll
+	def "raise not found error when provide image id that #idType"(String idType, String id) {
+		given:
+			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
+		when:
+			wordsOfWisdomFacade.wisdomImageBytesForId(id)
+		then:
+			thrown(NotFound)
+		where:
+			idType       | id
+			"not exists" | "not existing id"
+			"is null"    | null
+			"is empty"   | ""
+	}
+
 
 	private WordsOfWisdomFacade WordsOfWisdomFacade() {
 		new WordsOfWisdomFacade(new LocalWordsOfWisdomRepository(), new StubBackgroundImage())
