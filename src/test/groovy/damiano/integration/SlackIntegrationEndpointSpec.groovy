@@ -11,6 +11,7 @@ import org.springframework.core.io.ClassPathResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ContextConfiguration
@@ -38,6 +39,9 @@ class SlackIntegrationEndpointSpec extends Specification {
 
 	@Shared
 	static Resource imgResource = new ClassPathResource("dc-background.png")
+
+	static private String token = "12345"
+
 
 	void setup() {
 		given(image.toByteArray()).willReturn(imgResource.inputStream.bytes)
@@ -81,10 +85,20 @@ class SlackIntegrationEndpointSpec extends Specification {
 
 	}
 
+	def "Respond with bad request for wrong token"() {
+		given:
+			token = "WRONG"
+		when:
+			def error = send(slackCommand())
+		then:
+			error
+			error.status == HttpStatus.BAD_REQUEST.value()
+	}
+
 
 	private static MultiValueMap<String, String> slackCommand() {
 		MultiValueMap<String, String> command = new LinkedMultiValueMap<String, String>()
-		command.add("token", "12345")
+		command.add("token", token)
 		command.add("text", "very wisdom text")
 		return command
 	}
@@ -95,6 +109,7 @@ class SlackIntegrationEndpointSpec extends Specification {
 	}
 
 	private byte[] loadImage(String imageUrl) {
+		//noinspection GroovyAssignabilityCheck
 		ResponseEntity<byte[]> entity = restTemplate.exchange(imageUrl, GET, imageRequestHeaders(), byte[])
 		return entity.getBody()
 	}

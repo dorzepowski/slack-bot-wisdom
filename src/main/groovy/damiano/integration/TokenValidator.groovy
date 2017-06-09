@@ -18,6 +18,8 @@ class TokenValidator {
 	void validate(String tokenToValidate) {
 		println tokenToValidate
 		println token == tokenToValidate
-		assert token == tokenToValidate
+		if (token != tokenToValidate) {
+			throw new InvalidToken()
+		}
 	}
 }
