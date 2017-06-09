@@ -4,7 +4,6 @@ import java.awt.*
 import java.util.List
 
 import damiano.printer.Decoration
-import damiano.printer.Image
 import damiano.printer.Media
 import damiano.printer.Printable
 import damiano.printer.PrintableStringApi
@@ -25,7 +24,7 @@ class MockPrinter implements Printer {
 	}
 
 	@Override
-	Image toImage() {
+	damiano.printer.Image toImage() {
 		return null
 	}
 

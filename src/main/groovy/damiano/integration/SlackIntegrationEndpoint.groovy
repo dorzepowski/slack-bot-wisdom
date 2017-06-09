@@ -1,7 +1,6 @@
 package damiano.integration
 
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 import damiano.printer.Image
 import damiano.wisdom.WordsOfWisdomFacade
@@ -45,8 +44,7 @@ class SlackIntegrationEndpoint {
 
 	@GetMapping(path = "/wisdom/{imageId}", produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
-	Resource wisdomImage(
-			@PathVariable("imageId") String imageId, HttpServletRequest request, HttpServletResponse response) {
+	Resource wisdomImage(@PathVariable("imageId") String imageId) {
 		Image image = wordsOfWisdomFacade.wisdomImageBytesForId(imageId)
 		return new ByteArrayResource(image.toByteArray())
 	}

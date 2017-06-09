@@ -31,12 +31,12 @@ class BufferedImagePrinter implements Printer {
 
 
 	@Override
-	Image toImage() {
+	ImageFromBufferedImage toImage() {
 		Media media = new GraphicsMedia(image.createGraphics())
 
 		printOn(media)
 
-		return new Image(image)
+		return new ImageFromBufferedImage(image)
 	}
 
 	private void printOn(Media media) {

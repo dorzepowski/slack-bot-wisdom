@@ -1,10 +1,14 @@
 package damiano.integration
 
+import damiano.printer.Image
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.Resource
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -12,8 +16,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
+import spock.lang.Shared
 import spock.lang.Specification
 
+import static org.mockito.BDDMockito.given
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import static org.springframework.http.HttpMethod.GET
 
@@ -22,11 +28,20 @@ import static org.springframework.http.HttpMethod.GET
 class SlackIntegrationEndpointSpec extends Specification {
 
 	@LocalServerPort
-	private int port
+	int port
 
 	@Autowired
-	private TestRestTemplate restTemplate
+	TestRestTemplate restTemplate
 
+	@MockBean
+	Image image
+
+	@Shared
+	static Resource imgResource = new ClassPathResource("dc-background.png")
+
+	void setup() {
+		given(image.toByteArray()).willReturn(imgResource.inputStream.bytes)
+	}
 
 	def "Respond for command go to chanel"() {
 		when:
@@ -89,5 +104,6 @@ class SlackIntegrationEndpointSpec extends Specification {
 		headers.setAccept([MediaType.IMAGE_PNG])
 		return new HttpEntity<String>(headers)
 	}
+
 
 }
