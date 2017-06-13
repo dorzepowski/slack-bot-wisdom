@@ -26,7 +26,7 @@ import static org.springframework.http.HttpMethod.GET
 
 @ContextConfiguration
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class SlackIntegrationEndpointSpec extends Specification {
+class CreatingNewWisdomWithSlackIntegrationEndpointSpec extends Specification {
 
 	@LocalServerPort
 	int port
@@ -104,7 +104,7 @@ class SlackIntegrationEndpointSpec extends Specification {
 	}
 
 	private def send(MultiValueMap<String, String> command) {
-		ResponseEntity<String> response = restTemplate.postForEntity("/", command, String.class)
+		ResponseEntity<String> response = restTemplate.postForEntity("/wisdom/new", command, String.class)
 		return new JsonSlurper().parseText(response.body)
 	}
 

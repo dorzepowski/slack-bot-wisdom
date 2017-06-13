@@ -29,7 +29,8 @@ class SlackResponse {
 		private final String imageUrl
 
 		Attachment(String imageId) {
-			this.imageUrl = request.requestURL.append("wisdom/$imageId").toString()
+			URL url = request.requestURL.toURL()
+			this.imageUrl = url.getProtocol() + "://" + url.getAuthority() + "/wisdom/$imageId"
 		}
 	}
 }

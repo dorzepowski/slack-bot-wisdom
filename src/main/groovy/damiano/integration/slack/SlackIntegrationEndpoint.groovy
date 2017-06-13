@@ -59,18 +59,6 @@ class SlackIntegrationEndpoint {
 		return new SlackResponse(request, imageId)
 	}
 
-	@RequestMapping(path = "/", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = POST)
-	@ResponseBody
-	SlackResponse oneToRule(
-			@RequestParam("token") String token,
-			@RequestParam("text") String text, HttpServletRequest request) {
-		tokenValidator.validate(token)
-
-		String imageId = wordsOfWisdomFacade.wisdomIdFor(text)
-
-		return new SlackResponse(request, imageId)
-	}
-
 	@GetMapping(path = "/wisdom/{imageId}", produces = MediaType.IMAGE_PNG_VALUE)
 	@ResponseBody
 	Resource wisdomImage(@PathVariable("imageId") String imageId) {
