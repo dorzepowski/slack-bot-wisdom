@@ -7,4 +7,6 @@ interface WordsOfWisdom {
 	WordOfWisdom get(String id)
 
 	long count()
+
+	WordOfWisdom search(String searchPhrase)
 }

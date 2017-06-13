@@ -24,6 +24,10 @@ class WordOfWisdom {
 		return key()
 	}
 
+	String getSentence() {
+		return wisdom
+	}
+
 	void printWith(Printer printer) {
 		printWisdom(printer)
 

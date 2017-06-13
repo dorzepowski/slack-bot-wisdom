@@ -2,7 +2,7 @@ package damiano.wisdom
 
 import spock.lang.Specification
 
-class LocalWordsOfWisdomRepositorySpec extends Specification {
+class BaseOperationsOnLocalWordsOfWisdomRepositorySpec extends Specification {
 
 	def "add one word of wisdom"() {
 		given:

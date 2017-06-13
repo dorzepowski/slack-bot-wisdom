@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest
 
 import damiano.integration.slack.token.TokenValidator
 import damiano.printer.Image
+import damiano.wisdom.WordsOfWisdom
 import damiano.wisdom.WordsOfWisdomFacade
 import groovy.transform.TypeChecked
 import org.springframework.core.io.ByteArrayResource
@@ -26,14 +27,41 @@ class SlackIntegrationEndpoint {
 
 	final WordsOfWisdomFacade wordsOfWisdomFacade
 
-	SlackIntegrationEndpoint(TokenValidator tokenValidator, WordsOfWisdomFacade wordsOfWisdomFacade) {
+	final WordsOfWisdom wordsOfWisdom
+
+	SlackIntegrationEndpoint(TokenValidator tokenValidator, WordsOfWisdomFacade wordsOfWisdomFacade, WordsOfWisdom wordsOfWisdom) {
 		this.tokenValidator = tokenValidator
 		this.wordsOfWisdomFacade = wordsOfWisdomFacade
+		this.wordsOfWisdom = wordsOfWisdom
+	}
+
+	@RequestMapping(path = "/wisdom", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = POST)
+	@ResponseBody
+	SlackResponse find(
+			@RequestParam("token") String token,
+			@RequestParam("text") String searchText, HttpServletRequest request) {
+		tokenValidator.validate(token)
+
+		String imageId = wordsOfWisdom.search(searchText).id
+
+		return new SlackResponse(request, imageId)
+	}
+
+	@RequestMapping(path = "/wisdom/new", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = POST)
+	@ResponseBody
+	SlackResponse newWisdom(
+			@RequestParam("token") String token,
+			@RequestParam("text") String wisdomText, HttpServletRequest request) {
+		tokenValidator.validate(token)
+
+		String imageId = wordsOfWisdomFacade.wisdomIdFor(wisdomText)
+
+		return new SlackResponse(request, imageId)
 	}
 
 	@RequestMapping(path = "/", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = POST)
 	@ResponseBody
-	SlackResponse demo(
+	SlackResponse oneToRule(
 			@RequestParam("token") String token,
 			@RequestParam("text") String text, HttpServletRequest request) {
 		tokenValidator.validate(token)
