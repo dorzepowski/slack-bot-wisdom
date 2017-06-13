@@ -58,6 +58,11 @@ class LocalWordsOfWisdomRepository implements WordsOfWisdom {
 		}
 	}
 
+	@Override
+	List<WordOfWisdom> toList() {
+		return db.values().toList()
+	}
+
 	private static def throwNotFound() {
 		throw new NotFound()
 	}

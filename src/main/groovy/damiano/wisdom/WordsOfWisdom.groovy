@@ -9,4 +9,6 @@ interface WordsOfWisdom {
 	long count()
 
 	WordOfWisdom search(String searchPhrase)
+
+	List<WordOfWisdom> toList()
 }

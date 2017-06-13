@@ -23,10 +23,12 @@ class GetImageForWisdomFromWordsOfWisdomFacadeSpec extends Specification {
 														and another line
 														""".stripIndent()
 
+	WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
+
+	private String text = "some wise text"
+
+
 	def "provide id for wisdom text"() {
-		given:
-			String text = "some wise text"
-			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
 		when:
 			String id = wordsOfWisdomFacade.wisdomIdFor(text)
 		then:
@@ -34,9 +36,6 @@ class GetImageForWisdomFromWordsOfWisdomFacadeSpec extends Specification {
 	}
 
 	def "get image for given text"() {
-		given:
-			String text = "some wise text"
-			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
 		when:
 			String id = wordsOfWisdomFacade.wisdomIdFor(text)
 			byte[] image = wordsOfWisdomFacade.wisdomImageBytesForId(id).toByteArray()
@@ -47,8 +46,6 @@ class GetImageForWisdomFromWordsOfWisdomFacadeSpec extends Specification {
 
 	@Unroll
 	def "get image with #wisdomLinesNumber text line and author line for given #textType text"(String textType, String text, int wisdomLinesNumber) {
-		given:
-			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
 		when:
 			String id = wordsOfWisdomFacade.wisdomIdFor(text)
 			byte[] image = wordsOfWisdomFacade.wisdomImageBytesForId(id).toByteArray()
@@ -65,8 +62,6 @@ class GetImageForWisdomFromWordsOfWisdomFacadeSpec extends Specification {
 
 	@Unroll
 	def "raise not found error when provide image id that #idType"(String idType, String id) {
-		given:
-			WordsOfWisdomFacade wordsOfWisdomFacade = WordsOfWisdomFacade()
 		when:
 			wordsOfWisdomFacade.wisdomImageBytesForId(id)
 		then:

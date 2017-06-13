@@ -1,7 +1,5 @@
 package damiano.wisdom
 
-import java.util.concurrent.ConcurrentHashMap
-
 import damiano.printer.BackgroundImage
 import damiano.printer.Image
 import damiano.printer.Printer
@@ -16,8 +14,6 @@ class WordsOfWisdomFacade {
 
 	private final WordsOfWisdom wordsOfWisdom
 
-	private final Map<String, String> DB = new ConcurrentHashMap()
-
 	WordsOfWisdomFacade(
 			WordsOfWisdom wordsOfWisdom,
 			BackgroundImage media
@@ -30,9 +26,6 @@ class WordsOfWisdomFacade {
 		log.info("Wisdom to process: $text")
 		WordOfWisdom wisdom = new WordOfWisdom(text)
 		wordsOfWisdom.add(wisdom)
-
-		DB.put(wisdom.id, text)
-
 		return wisdom.id
 	}
 
