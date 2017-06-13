@@ -23,29 +23,41 @@ class AdminEndpointSpec extends Specification {
 	@MockBean
 	Image image
 
+	private List<String> wordsToSave = ["wise text", "word of wisdom"]
+
 
 	def "expect api statuses"() {
 		when:
-			ResponseEntity<Void> entity = restTemplate.postForEntity("/admin/wisdom", ["wise text", "word of wisdom"], Void)
+			ResponseEntity<Void> entity = postForSave(wordsToSave)
 		then:
 			entity.statusCode == HttpStatus.CREATED
 		when:
-			ResponseEntity<String> response = restTemplate.getForEntity("/admin/wisdom", String)
+			ResponseEntity<String> response = getAllWisdomPhrases()
 		then:
 			response.statusCode == HttpStatus.OK
 	}
 
 	def "list all stored words of wisdom"() {
 		given:
-			def wordsToFeed = ["wise text", "word of wisdom"]
-			restTemplate.postForEntity("/admin/wisdom", wordsToFeed, Void)
+			postForSave(wordsToSave)
 		when:
-			ResponseEntity<String> response = restTemplate.getForEntity("/admin/wisdom", String)
-			def wordsOfWisdom = new JsonSlurper().parseText(response.body)
+			def wordsOfWisdom = parsed(getAllWisdomPhrases())
 		then:
 			wordsOfWisdom.size() == 2
-			wordsOfWisdom.containsAll(wordsToFeed)
+			wordsOfWisdom.containsAll(wordsToSave)
 
+	}
+
+	private ResponseEntity<Void> postForSave(List<String> feed) {
+		restTemplate.postForEntity("/admin/wisdom", feed, Void)
+	}
+
+	private def parsed(ResponseEntity<String> response) {
+		new JsonSlurper().parseText(response.body)
+	}
+
+	private ResponseEntity<String> getAllWisdomPhrases() {
+		restTemplate.getForEntity("/admin/wisdom", String)
 	}
 
 }
