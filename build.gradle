@@ -20,6 +20,11 @@ apply plugin: 'io.spring.dependency-management'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
+bootJar {
+	baseName = "slack-damiano"
+	version = version
+}
+
 repositories {
 	mavenCentral()
 	maven { url "https://repo.spring.io/snapshot" }
