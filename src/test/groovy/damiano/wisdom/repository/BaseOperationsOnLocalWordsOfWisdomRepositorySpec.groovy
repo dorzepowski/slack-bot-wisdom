@@ -1,10 +1,18 @@
-package damiano.wisdom
+package damiano.wisdom.repository
 
+import damiano.wisdom.NotFound
+import damiano.wisdom.WordOfWisdom
+import damiano.wisdom.WordsOfWisdom
+import damiano.wisdom.WordsOfWisdomTestFactory
+import spock.lang.Shared
 import spock.lang.Specification
 
 class BaseOperationsOnLocalWordsOfWisdomRepositorySpec extends Specification {
 
-	private WordsOfWisdom wordsOfWisdom = new LocalWordsOfWisdomRepository()
+	@Shared
+	static WordsOfWisdomTestFactory factory = new WordsOfWisdomTestFactory()
+
+	WordsOfWisdom wordsOfWisdom = factory.localWordsOfWisdom()
 
 	private WordOfWisdom wisdom = new WordOfWisdom("Wise text")
 

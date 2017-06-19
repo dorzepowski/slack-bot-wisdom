@@ -1,1 +1,5 @@
 SLACK_TOKENS: 12345
+
+spring:
+  profiles:
+    active: local

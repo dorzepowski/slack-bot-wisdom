@@ -3,9 +3,7 @@ package damiano.wisdom
 import java.util.concurrent.ConcurrentHashMap
 
 import groovy.transform.PackageScope
-import org.springframework.stereotype.Service
 
-@Service
 @PackageScope
 class LocalWordsOfWisdomRepository implements WordsOfWisdom {
 

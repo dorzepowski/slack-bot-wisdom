@@ -1,5 +1,9 @@
-package damiano.wisdom
+package damiano.wisdom.repository
 
+import damiano.wisdom.WordOfWisdom
+import damiano.wisdom.WordsOfWisdom
+import damiano.wisdom.WordsOfWisdomTestFactory
+import spock.lang.Shared
 import spock.lang.Specification
 
 
@@ -9,7 +13,10 @@ class SearchWithLocalWordsOfWisdomRepository extends Specification {
 	public static
 	final String SEARCH_PHRASE_FOR_NOT_EXISTING_WISDOM = "SearchPhraseForNotExistingWisdom"
 
-	WordsOfWisdom wordsOfWisdom = new LocalWordsOfWisdomRepository()
+	@Shared
+	static WordsOfWisdomTestFactory factory = new WordsOfWisdomTestFactory()
+
+	WordsOfWisdom wordsOfWisdom = factory.localWordsOfWisdom()
 
 	WordOfWisdom wisdom
 
