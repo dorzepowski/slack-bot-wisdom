@@ -15,7 +15,8 @@ class WisdomConfiguration {
 	@Bean
 	WordsOfWisdom fileWordsOfWisdom() {
 		File storageFile = new File("db.json")
-		return new FileSystemWordsOfWisdomRepository(localWordsOfWisdom(), storageFile)
+		storageFile.createNewFile()
+		return new FileSystemWordsOfWisdomRepository(new LocalWordsOfWisdomRepository(), storageFile)
 	}
 
 	@Profile(Profiles.LOCAL)
