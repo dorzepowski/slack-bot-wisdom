@@ -1,29 +1,28 @@
 package damiano.wisdom.repository
 
-import damiano.wisdom.FileSystemWordsOfWisdomRule
 import damiano.wisdom.WordOfWisdom
 import damiano.wisdom.WordsOfWisdom
-import org.junit.Rule
+import damiano.wisdom.WordsOfWisdomTestFactory
+import spock.lang.Shared
 import spock.lang.Specification
 
-class SearchWithFileSystemWordsOfWisdomRepository extends Specification {
+class SearchWithPersistedWordsOfWisdomRepository extends Specification {
 
 
 	public static
 	final String SEARCH_PHRASE_FOR_NOT_EXISTING_WISDOM = "SearchPhraseForNotExistingWisdom"
 
-	@Rule
-	FileSystemWordsOfWisdomRule wordsOfWisdomRule = new FileSystemWordsOfWisdomRule()
 
-	WordsOfWisdom wordsOfWisdom
+	@Shared
+	static WordsOfWisdomTestFactory factory = new WordsOfWisdomTestFactory()
+
+	WordsOfWisdom wordsOfWisdom = factory.persistedWordsOfWisdom()
 
 	WordOfWisdom wisdom
 
 	WordOfWisdom expectedWisdom
 
 	void setup() {
-		wordsOfWisdom = wordsOfWisdomRule.create()
-
 		wisdom = new WordOfWisdom("something other")
 		expectedWisdom = new WordOfWisdom("Wise text")
 		wordsOfWisdom.add(wisdom)

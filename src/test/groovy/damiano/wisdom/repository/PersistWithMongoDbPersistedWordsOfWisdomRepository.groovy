@@ -13,7 +13,7 @@ import spock.lang.Specification
 @ContextConfiguration
 @ActiveProfiles("mongo")
 @DataMongoTest
-class PersistWithMongoDbWordsOfWisdomRepository extends Specification {
+class PersistWithMongoDbPersistedWordsOfWisdomRepository extends Specification {
 
 	@Autowired
 	Storage storage
@@ -22,7 +22,7 @@ class PersistWithMongoDbWordsOfWisdomRepository extends Specification {
 
 
 	void setup() {
-		this.wordsOfWisdom = new WordsOfWisdomTestFactory().mongoWordsOfWisdom(storage)
+		this.wordsOfWisdom = new WordsOfWisdomTestFactory().persistedWordsOfWisdom(storage)
 	}
 
 	def "New repository should contain the same number of words of wisdom as old one"() {
@@ -30,7 +30,7 @@ class PersistWithMongoDbWordsOfWisdomRepository extends Specification {
 			wordsOfWisdom.add(new WordOfWisdom("Text"))
 			int expectedCount = wordsOfWisdom.count()
 		when:
-			WordsOfWisdom newlyCreatedWordsOfWisdom = new WordsOfWisdomTestFactory().mongoWordsOfWisdom(storage)
+			WordsOfWisdom newlyCreatedWordsOfWisdom = new WordsOfWisdomTestFactory().persistedWordsOfWisdom(storage)
 		then:
 			newlyCreatedWordsOfWisdom.count() == expectedCount
 	}
@@ -40,7 +40,7 @@ class PersistWithMongoDbWordsOfWisdomRepository extends Specification {
 			def expectedSentences = ["Text", "Wise"]
 			expectedSentences.collect({ new WordOfWisdom(it) }).each(wordsOfWisdom.&add)
 		when:
-			WordsOfWisdom newlyCreatedWordsOfWisdom = new WordsOfWisdomTestFactory().mongoWordsOfWisdom(storage)
+			WordsOfWisdom newlyCreatedWordsOfWisdom = new WordsOfWisdomTestFactory().persistedWordsOfWisdom(storage)
 			List<String> sentences = newlyCreatedWordsOfWisdom.toList().collect { it.sentence }
 		then:
 			sentences.sort() == expectedSentences.sort()

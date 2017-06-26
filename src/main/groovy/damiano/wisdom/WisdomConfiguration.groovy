@@ -14,10 +14,17 @@ class WisdomConfiguration {
 
 	@Profile(Profiles.FILE)
 	@Bean
-	WordsOfWisdom fileWordsOfWisdom() {
+	Storage fileStorage() {
 		File storageFile = new File("db.json")
 		storageFile.createNewFile()
-		return new FileSystemWordsOfWisdomRepository(new LocalWordsOfWisdomRepository(), storageFile)
+		return new FileSystemStorage(storageFile)
+	}
+
+
+	@Profile(Profiles.NON_LOCAL)
+	@Bean
+	WordsOfWisdom persistedStorage(Storage storage) {
+		return new PersistedWordsOfWisdomRepository(new LocalWordsOfWisdomRepository(), storage)
 	}
 
 	@Profile(Profiles.LOCAL)

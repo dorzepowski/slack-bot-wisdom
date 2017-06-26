@@ -1,24 +1,20 @@
 package damiano.wisdom.repository
 
-import damiano.wisdom.FileSystemWordsOfWisdomRule
 import damiano.wisdom.NotFound
 import damiano.wisdom.WordOfWisdom
 import damiano.wisdom.WordsOfWisdom
-import org.junit.Rule
+import damiano.wisdom.WordsOfWisdomTestFactory
+import spock.lang.Shared
 import spock.lang.Specification
 
-class BaseOperationsOnFileSystemWordsOfWisdomRepositorySpec extends Specification {
+class BaseOperationsOnPersistedWordsOfWisdomRepositorySpec extends Specification {
 
-	@Rule
-	FileSystemWordsOfWisdomRule wordsOfWisdomRule = new FileSystemWordsOfWisdomRule()
+	@Shared
+	static WordsOfWisdomTestFactory factory = new WordsOfWisdomTestFactory()
 
-	WordsOfWisdom wordsOfWisdom
+	WordsOfWisdom wordsOfWisdom = factory.persistedWordsOfWisdom()
 
 	WordOfWisdom wisdom = new WordOfWisdom("Wise text")
-
-	void setup() {
-		wordsOfWisdom = wordsOfWisdomRule.create()
-	}
 
 	def "add one word of wisdom"() {
 		given:

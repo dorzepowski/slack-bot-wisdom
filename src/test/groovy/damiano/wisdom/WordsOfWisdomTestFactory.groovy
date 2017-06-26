@@ -1,5 +1,7 @@
 package damiano.wisdom
 
+import static org.mockito.Mockito.mock
+
 class WordsOfWisdomTestFactory {
 
 	WordsOfWisdom localWordsOfWisdom() {
@@ -7,10 +9,17 @@ class WordsOfWisdomTestFactory {
 	}
 
 	WordsOfWisdom fileSystemWordsOfWisdom(File file) {
-		new FileSystemWordsOfWisdomRepository(localWordsOfWisdom(), file)
+		def storage = new FileSystemStorage(file)
+		persistedWordsOfWisdom(storage)
 	}
 
-	WordsOfWisdom mongoWordsOfWisdom(Storage storage) {
-		new MongoDbWordsOfWisdomRepository(localWordsOfWisdom(), storage)
+
+	WordsOfWisdom persistedWordsOfWisdom(Storage storage) {
+		new PersistedWordsOfWisdomRepository(localWordsOfWisdom(), storage)
+	}
+
+	WordsOfWisdom persistedWordsOfWisdom() {
+		def storage = mock(Storage)
+		persistedWordsOfWisdom(storage)
 	}
 }

@@ -6,7 +6,7 @@ import damiano.wisdom.WordsOfWisdom
 import org.junit.Rule
 import spock.lang.Specification
 
-class PersistWithLocalFileSystemWordsOfWisdomRepository extends Specification {
+class PersistWithLocalFileSystemPersistedWordsOfWisdomRepository extends Specification {
 
 	@Rule
 	FileSystemWordsOfWisdomRule wordsOfWisdomRule = new FileSystemWordsOfWisdomRule()

@@ -3,17 +3,17 @@ package damiano.wisdom
 import groovy.transform.PackageScope
 
 @PackageScope
-class MongoDbWordsOfWisdomRepository implements WordsOfWisdom {
+class PersistedWordsOfWisdomRepository implements WordsOfWisdom {
 
 	@Delegate
 	private final WordsOfWisdom original
 
 	private final Storage storage
 
-	MongoDbWordsOfWisdomRepository(WordsOfWisdom original, Storage storage) {
+	PersistedWordsOfWisdomRepository(WordsOfWisdom original, Storage storage) {
 		this.original = original
 		this.storage = storage
-		loadSentences().each(original.&add)
+		storage.findAll().each(original.&add)
 	}
 
 	@Override
@@ -21,10 +21,5 @@ class MongoDbWordsOfWisdomRepository implements WordsOfWisdom {
 		original.add(wisdom)
 		storage.save(wisdom)
 	}
-
-	private Iterable<WordOfWisdom> loadSentences() {
-		storage.findAll()
-	}
-
 
 }
