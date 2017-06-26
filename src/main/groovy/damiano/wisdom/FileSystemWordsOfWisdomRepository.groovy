@@ -28,7 +28,7 @@ class FileSystemWordsOfWisdomRepository implements WordsOfWisdom {
 		}
 	}
 
-	private List<WordOfWisdom> loadSentences() {
+	private Iterable<WordOfWisdom> loadSentences() {
 		storage.readLines().collect { new WordOfWisdom(it) }
 	}
 }

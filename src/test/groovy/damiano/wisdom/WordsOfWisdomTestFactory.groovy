@@ -10,4 +10,7 @@ class WordsOfWisdomTestFactory {
 		new FileSystemWordsOfWisdomRepository(localWordsOfWisdom(), file)
 	}
 
+	WordsOfWisdom mongoWordsOfWisdom(Storage storage) {
+		new MongoDbWordsOfWisdomRepository(localWordsOfWisdom(), storage)
+	}
 }
