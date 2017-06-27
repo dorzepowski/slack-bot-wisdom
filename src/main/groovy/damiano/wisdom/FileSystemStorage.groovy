@@ -12,13 +12,13 @@ class FileSystemStorage implements Storage {
 	}
 
 	@Override
-	WordOfWisdom save(WordOfWisdom entity) {
-		file.withWriterAppend { writer -> writer.println(entity.sentence) }
-		return entity
+	Quote save(Quote quote) {
+		file.withWriterAppend { writer -> writer.println(quote.text) }
+		return quote
 	}
 
 	@Override
-	Iterable<WordOfWisdom> findAll() {
-		file.readLines().collect { new WordOfWisdom(it) }
+	Iterable<Quote> findAll() {
+		file.readLines().collect { Quote.fromString(it) }
 	}
 }

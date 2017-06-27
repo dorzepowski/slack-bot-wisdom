@@ -13,13 +13,13 @@ class PersistedWordsOfWisdomRepository implements WordsOfWisdom {
 	PersistedWordsOfWisdomRepository(WordsOfWisdom original, Storage storage) {
 		this.original = original
 		this.storage = storage
-		storage.findAll().each(original.&add)
+		storage.findAll().collect({ it.toWisdom() }).each(original.&add)
 	}
 
 	@Override
 	void add(WordOfWisdom wisdom) {
 		original.add(wisdom)
-		storage.save(wisdom)
+		storage.save(Quote.fromWisdom(wisdom))
 	}
 
 }

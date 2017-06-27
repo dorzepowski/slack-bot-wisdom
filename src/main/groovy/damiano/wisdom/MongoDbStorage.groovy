@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository
 
 @PackageScope
 @Profile(Profiles.MONGO_DB)
-interface MongoDbStorage extends MongoRepository<WordOfWisdom, String>, Storage {
+interface MongoDbStorage extends MongoRepository<Quote, String>, Storage {
 
 }

@@ -2,7 +2,7 @@ package damiano.wisdom
 
 interface Storage {
 
-	WordOfWisdom save(WordOfWisdom entity)
+	Quote save(Quote entity)
 
-	Iterable<WordOfWisdom> findAll()
+	Iterable<Quote> findAll()
 }

@@ -8,6 +8,7 @@ import groovy.transform.PackageScope
 import groovy.util.logging.Slf4j
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.PersistenceConstructor
+import org.springframework.data.annotation.Transient
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.core.mapping.Field
 
@@ -17,8 +18,10 @@ class WordOfWisdom {
 
 	public static final String AUTHOR_NAME = "~ Damiano Cohello"
 
+	@Transient
 	private final String wisdom
 
+	@Transient
 	private String key
 
 	@PersistenceConstructor
