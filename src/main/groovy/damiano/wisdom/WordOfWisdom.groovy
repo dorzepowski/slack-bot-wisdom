@@ -6,35 +6,24 @@ import java.security.MessageDigest
 import damiano.printer.Printer
 import groovy.transform.PackageScope
 import groovy.util.logging.Slf4j
-import org.springframework.data.annotation.Id
-import org.springframework.data.annotation.PersistenceConstructor
-import org.springframework.data.annotation.Transient
-import org.springframework.data.mongodb.core.mapping.Document
-import org.springframework.data.mongodb.core.mapping.Field
 
 @Slf4j
-@Document(collection = "quotes")
 class WordOfWisdom {
 
-	public static final String AUTHOR_NAME = "~ Damiano Cohello"
+	public static final String AUTHOR_NAME = "~ Damiano Coelho"
 
-	@Transient
 	private final String wisdom
 
-	@Transient
 	private String key
 
-	@PersistenceConstructor
 	WordOfWisdom(String wisdom) {
 		this.wisdom = wisdom.trim()
 	}
 
-	@Id
 	String getId() {
 		return key()
 	}
 
-	@Field("text")
 	String getSentence() {
 		return wisdom
 	}
